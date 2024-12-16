@@ -207,17 +207,20 @@ In summary, a frame is a collection of samples, one for each channel. The writef
 传统的VAD需要再语音结束后等待一小段时间，才能判断语音的阶段点，导致用户体验差，这篇文章考虑再传统的静默检测VAD模型后加入一个frame级别标点检测。
 ![尾部静默等待](images/tail-slience.png)
 
-**a: 标点打断优化逻辑：**
+**a: 标点打断优化逻辑：**    
 - 当发现一个结束标点（ending punctuation）的时候，这代表一个完整语意块的结束，这时可以采用一个相对较小的静默时间。 (300ms)
 - 当发现一个非结束标点 (non-ending punctuation)的时候，可以选择一个相对长一点点的静默时间。 (400ms)
-- 当一直没有发现一个标点的时候，我们可以选择默认的静默等待时间(700ms)
+- 当一直没有发现一个标点的时候，我们可以选择默认的静默等待时间(700ms)   
 
 **b: 分类任务label：**        
 在传统的speech presence 和speech absence的基础上，新增了endpoint类别。
 endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于，通过标点判断静默时间实在prediction的时候发生，而endpoint是在训练的时候就考虑。  
 
-**c: 训练语意损失**    
+**c: 训练语意损失(类似一个AutoEncoder)**    
 语义损失只在训练阶段考虑，作用时为了辅助模型优化，在推理阶段，VAD模块可以单独使用，不用去考虑语义推理这个部分。
+
+**d: 音频编码器 (支持Streaming)**   
+使用Contextual blcok conformer (CNN + Transformer)进行音频编码，传入一个上下文向量，提供上下文信息，音频信息通过音频编码器处理后得到一个frame级别的特征表示。
 
 ![训练目标](images/training-objeectives.png)
 
@@ -228,3 +231,5 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 [4. whisper streaming](https://github.com/ufal/whisper_streaming)
 
 [5. fast_whisper](https://github.com/SYSTRAN/faster-whisper)
+
+[6. Speech LLM (Youtube)](https://www.youtube.com/watch?v=MyxgEx4_Moo)
