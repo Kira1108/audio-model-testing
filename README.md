@@ -1,6 +1,6 @@
 # Note on audio processing
 
-这是一段音频流接收的代码，数据使用Chunk传过来的，我们要在这个流式服务中，解析音频，触发动作。
+这是一段音频流接收的代码，数据以Chunk流式传过来的，我们要在这个流式服务中，解析音频，触发动作。
 ```python
 """PyAudio Example: full-duplex wire between input and output."""
 
