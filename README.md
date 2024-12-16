@@ -141,6 +141,7 @@ RATE // CHUNK * RECORD_SECONDS: This calculates the total number of chunks for t
 
 So, the loop will iterate 215 times, reading and writing 1024 samples (one chunk) each time, to cover the entire 5-second recording period.
 
+> 多少个信号点，放到流里面传输一次
 ---
 **Streaming**     
 The stream object in PyAudio functions similarly to a Python generator, providing a continuous flow of audio data in chunks of the specified size. Here's a more detailed explanation:
@@ -156,6 +157,8 @@ Writing Data: The read data is then written to the output file using wf.writefra
 
 In summary, the stream object acts like a valve, providing a continuous flow of audio data in chunks. It does not retain information about previously provided data, focusing only on the current chunk being read.
 
+> 流式处理的逻辑
+
 ---
 **Channels**    
 The CHANNELS parameter specifies the number of audio channels to be used for recording or playback. It determines whether the audio will be recorded in mono (single channel) or stereo (two channels).
@@ -170,4 +173,5 @@ Mono (1 channel): All audio is recorded into a single channel. **This is often s
 Stereo (2 channels): Audio is recorded into two separate channels, typically representing the left and right speakers. This is used for music and other applications where spatial audio information is important.
 In summary, the CHANNELS parameter determines whether the audio is recorded in mono or stereo, based on the system platform.
 
+> 简单的场景，非音乐类的场景，选择单声道是足够的
 
