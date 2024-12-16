@@ -177,3 +177,4 @@ In summary, the CHANNELS parameter determines whether the audio is recorded in m
 
 ## 3. 参考信息
 [VAD打断文章](https://cloud.tencent.com/developer/article/2369279)
+[中科院+阿里的VAD论文(2023)](https://arxiv.org/pdf/2305.12450)
