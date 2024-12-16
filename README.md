@@ -175,6 +175,42 @@ In summary, the CHANNELS parameter determines whether the audio is recorded in m
 
 > 简单的场景，非音乐类的场景，选择单声道是足够的
 
+---
+**Frame**    
+In the context of audio processing, a frame is not a single data point but rather a collection of samples, one for each channel.
+
+Given your setup:
+
+Mono (1 channel): A frame consists of a single sample.
+Stereo (2 channels): A frame consists of two samples, one for the left channel and one for the right channel.
+So, in your case, if you are recording in stereo, each frame will contain two data points (samples).
+
+The writeframes method writes these frames to the file. When you call stream.read(CHUNK), it reads CHUNK frames from the audio input stream, and wf.writeframes writes these frames to the output file.
+
+Here's a breakdown:
+
+Mono (1 channel): Each frame is a single sample.
+Stereo (2 channels): Each frame consists of two samples (one for each channel).
+So, if CHUNK = 1024:
+
+In mono, stream.read(CHUNK) reads 1024 samples.
+In stereo, stream.read(CHUNK) reads 1024 frames, which equals 2048 samples (1024 for each channel).
+In summary, a frame is a collection of samples, one for each channel. The writeframes method writes these frames to the file, and the number of data points per frame depends on the number of channels.
+
+> 如果是单声道，Frame就是一个数据点，如果是2声道，frame就是2个数据点，有多少个channel，每个frame就有多少个数据点(sample)
+
+
+
 ## 3. 参考信息
 [1. VAD打断参考文章](https://cloud.tencent.com/developer/article/2369279)                   
-[2. 中科院+阿里的VAD论文(2023)](https://arxiv.org/pdf/2305.12450)
+[2. 中科院+阿里的VAD论文(2023)](https://arxiv.org/pdf/2305.12450)    
+传统的VAD需要再语音结束后等待一小段时间，才能判断语音的阶段点，导致用户体验差，这篇文章考虑再传统的静默检测VAD模型后加入一个frame级别标点检测。
+![尾部静默等待](image.png)
+**标点打断优化逻辑：**
+- 当发现一个结束标点（ending punctuation）的时候，这代表一个完整语意块的结束，这时可以采用一个相对较小的静默时间。 (300ms)
+- 当发现一个非结束标点 (non-ending punctuation)的时候，可以选择一个相对长一点点的静默时间。 (400ms)
+- 当一直没有发现一个标点的时候，我们可以选择默认的静默等待时间(700ms)
+
+**分类任务label：**        
+在传统的speech presence 和speech absence的基础上，新增了endpoint类别。
+endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于，通过标点判断静默时间实在prediction的时候发生，而endpoint是在训练的时候就考虑。    
