@@ -242,3 +242,5 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 [5. fast_whisper](https://github.com/SYSTRAN/faster-whisper)
 
 [6. Speech LLM (Youtube)](https://www.youtube.com/watch?v=MyxgEx4_Moo)
+
+[7. 中文开源模型FunASR](https://arxiv.org/pdf/2305.11013v1), [VAD模型FMSNhuggingface仓库](https://huggingface.co/funasr/fsmn-vad-onnx)
