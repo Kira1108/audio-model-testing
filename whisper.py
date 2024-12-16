@@ -90,8 +90,7 @@ class WhisperASR:
 
 if __name__ == "__main__":
     asr = WhisperASR(device="mps")
-    for _ in range(3):
-        transcription = asr.transcript_file("/Users/wanghuan/desktop/audio.m4a")
-        print(transcription)
-    
+    transcription = asr.transcript_file("/Users/mac/projects/audio-model-testing/output.wav")
+    print(transcription)
+
 
