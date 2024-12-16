@@ -117,4 +117,18 @@ Writing Data: The read data is then written to the output file using wf.writefra
 
 In summary, the stream object acts like a valve, providing a continuous flow of audio data in chunks. It does not retain information about previously provided data, focusing only on the current chunk being read.
 
+---
+**Channels**    
+The CHANNELS parameter specifies the number of audio channels to be used for recording or playback. It determines whether the audio will be recorded in mono (single channel) or stereo (two channels).
+
+In your code:
+
+Mono (1 channel): If the system platform is macOS ('darwin'), CHANNELS is set to 1. This means the audio will be recorded in mono, using a single audio channel.
+Stereo (2 channels): For other platforms, CHANNELS is set to 2. This means the audio will be recorded in stereo, using two audio channels (left and right).
+Here's a brief explanation of the two modes:
+
+Mono (1 channel): All audio is recorded into a single channel. **This is often sufficient for voice recordings or situations where spatial audio information is not important.**     
+Stereo (2 channels): Audio is recorded into two separate channels, typically representing the left and right speakers. This is used for music and other applications where spatial audio information is important.
+In summary, the CHANNELS parameter determines whether the audio is recorded in mono or stereo, based on the system platform.
+
 
