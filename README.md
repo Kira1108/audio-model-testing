@@ -25,7 +25,6 @@ pyaudio full duplex wire mode is useful in real-time audio processing.
 """PyAudio Example: full-duplex wire between input and output."""
 
 import sys
-
 import pyaudio
 
 RECORD_SECONDS = 5
