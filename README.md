@@ -102,7 +102,7 @@ RATE // CHUNK * RECORD_SECONDS: This calculates the total number of chunks for t
 
 So, the loop will iterate 215 times, reading and writing 1024 samples (one chunk) each time, to cover the entire 5-second recording period.
 
-
+---
 **Streaming**     
 The stream object in PyAudio functions similarly to a Python generator, providing a continuous flow of audio data in chunks of the specified size. Here's a more detailed explanation:
 
