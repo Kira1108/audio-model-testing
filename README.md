@@ -1,5 +1,44 @@
 # Note on audio processing
 
+这是一段音频流接收的代码，数据使用Chunk传过来的，我们要在这个流式服务中，解析音频，触发动作。
+```python
+"""PyAudio Example: full-duplex wire between input and output."""
+
+import sys
+
+import pyaudio
+
+RECORD_SECONDS = 5
+CHUNK = 1024
+RATE = 44100
+
+p = pyaudio.PyAudio()
+stream = p.open(format=p.get_format_from_width(2),
+                channels=1 if sys.platform == 'darwin' else 2,
+                rate=RATE,
+                input=True,
+                output=True,
+                frames_per_buffer=CHUNK)
+
+print('* recording')
+for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    # 这里要有一个处理逻辑，一般来说，话务返回了一个stream.read(CHUNK)
+    # process(stream.read(CHUNK)) 这里需要算法实现，当结果满足某种条件的时候
+    # 打断用户的说话
+
+    # 话务需要做这种改变
+    # reply_content, interupt = process(stream.read(CHUNK)):
+    # if interupt:
+    #     do_reply(reply_content)
+    # process = whisper_ASR/或者其他的打断模型 + LLM生成回复 + TTS
+    
+    stream.write(stream.read(CHUNK))
+print('* done')
+
+stream.close()
+p.terminate()
+```
+
 ## 1. Packages and installations
 1. Install librosa and soundfile to handle audio files.
 2. Install pyaudio to perform real-time audio processing.[pyAudio documentation](!https://people.csail.mit.edu/hubert/pyaudio/), follow the instruction to install pyaudio.
