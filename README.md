@@ -244,3 +244,26 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 [6. Speech LLM (Youtube)](https://www.youtube.com/watch?v=MyxgEx4_Moo)
 
 [7. 中文开源模型FunASR](https://arxiv.org/pdf/2305.11013v1), [VAD模型FMSNhuggingface仓库](https://huggingface.co/funasr/fsmn-vad-onnx)
+
+[8. 实时大模型神经有限状态机](https://arxiv.org/pdf/2405.19487)    
+**感知模块的流式处理**
+首先我们需要有一个感知模块，感知就是ASR，ASR接收640ms的流式chunk（一小个音频片段，见上文chunk），翻译成文本token，送给大模型。
+
+**状态转换**
+定义S: Start do something, C: continue do something.
+C.SPEAK = 继续说
+S.LISTEN = 开始听
+C.LISTEN = 继续听
+S.SPEAK = 开始说
+在某个时间点：LLM做以下之一的事件
+1） 接收一个外部来的token
+2） 输出一个文本token
+3） 输出一个特殊的状态
+
+![模型输入token序列](images/input_seq.png)
+1. 论文中的模型是专门训练过的。
+2. Prompt也需要精细的调整。
+3. 全双工的大模型，再加上RAG的流程，会不会太复杂，逐个token输出是不是也比复杂。
+4. 模型未开源，实现起来的难度很大。
+5. 采用Llama8B时间比较快，千问72能不能满足要求。
+6. Output时候，因为一次只输出一个token所以快，还是挺牛逼的。
