@@ -221,11 +221,17 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 
 **d: 音频编码器 (支持Streaming)**   
 使用Contextual blcok conformer (CNN + Transformer)进行音频编码，传入一个上下文向量，提供上下文信息，音频信息通过音频编码器处理后得到一个frame级别的特征表示。
-
-**e: 推理**   
-
-
 ![训练目标](images/training-objeectives.png)
+**e: 推理**   
+- 检测到结束标点，等待$t_E$后打断。
+- 检测到非结束标点，等待$t_{NE}$打断。
+- 检测到endpoint(classification)，直接打断。
+- 什么都没检测到，静默$t_{Max}$后打断
+![推理方式](images/infer.png)
+
+**f: 效果图**
+![效果图1](images/performance1.png)
+![效果图2](images/performance2.png)
 
 减少静默等待时间53% （内部数据集测试）
 
