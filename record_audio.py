@@ -1,3 +1,4 @@
+# 简单音频录制示例
 import wave
 import sys
 
