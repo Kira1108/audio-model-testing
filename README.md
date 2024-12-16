@@ -176,4 +176,4 @@ In summary, the CHANNELS parameter determines whether the audio is recorded in m
 > 简单的场景，非音乐类的场景，选择单声道是足够的
 
 ## 3. 参考信息
-[VAD打断博客](https://cloud.tencent.com/developer/article/2369279)
+[VAD打断文章](https://cloud.tencent.com/developer/article/2369279)
