@@ -222,3 +222,8 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 ![训练目标](images/training-objeectives.png)
 
 减少静默等待时间53% （内部数据集测试）
+
+[3. whisper能否用来做流式ASR (Youtube)](https://www.youtube.com/watch?v=_spinzpEeFM)
+
+
+[4. whisper streaming项目](https://github.com/ufal/whisper_streaming)
