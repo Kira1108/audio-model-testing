@@ -226,4 +226,6 @@ endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于�
 [3. whisper能否用来做流式ASR (Youtube)](https://www.youtube.com/watch?v=_spinzpEeFM)
 
 
-[4. whisper streaming项目](https://github.com/ufal/whisper_streaming)
+[4. whisper streaming](https://github.com/ufal/whisper_streaming)
+
+[5. fast_whisper](https://github.com/SYSTRAN/faster-whisper)
