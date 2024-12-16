@@ -217,10 +217,13 @@ In summary, a frame is a collection of samples, one for each channel. The writef
 endpoint的label逻辑就是上述的标点符号的逻辑，不同之处在于，通过标点判断静默时间实在prediction的时候发生，而endpoint是在训练的时候就考虑。  
 
 **c: 训练语意损失(类似一个AutoEncoder)**    
-语义损失只在训练阶段考虑，作用时为了辅助模型优化，在推理阶段，VAD模块可以单独使用，不用去考虑语义推理这个部分。
+语义损失只在训练阶段考虑，作用时为了辅助模型优化，在推理阶段，VAD模块可以单独使用，不用去考虑语义推理这个部分。想一下，如果只训练VAD，Encoder可能丢失原音频中的上下文信息，这一步的目的是保持这部分信息。
 
 **d: 音频编码器 (支持Streaming)**   
 使用Contextual blcok conformer (CNN + Transformer)进行音频编码，传入一个上下文向量，提供上下文信息，音频信息通过音频编码器处理后得到一个frame级别的特征表示。
+
+**e: 推理**   
+
 
 ![训练目标](images/training-objeectives.png)
 
