@@ -11,5 +11,3 @@ for chunk in agen.gen_chunks(seconds = 5):
     # print(whisper(chunk, sampling_rate))
     
 print(whisper(samples, sampling_rate))
-    
-    
