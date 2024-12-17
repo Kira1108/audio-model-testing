@@ -7,6 +7,18 @@ from typing import Any
 
 @dataclass
 class AudioRecorder:
+    """
+    Desc: Record audio from microphone
+    Args:
+        chunk_size: number of samples per chunk
+        audio_format: pyaudio audio format
+        channels: number of channels
+        rate: sampling rate, we use 16000 Hz which is required by Whisper model
+        
+    Methods:
+        gen_chunks: generate audio chunks from microphone, this generator returns audio samples as list
+    """
+    
     chunk_size:int = 1024
     audio_format:Any = pyaudio.paInt16
     channels:int = None
