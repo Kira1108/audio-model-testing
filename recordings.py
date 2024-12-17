@@ -4,6 +4,7 @@ import struct
 import numpy as np
 from dataclasses import dataclass
 from typing import Any
+import wave
 
 @dataclass
 class AudioRecorder:
@@ -51,8 +52,21 @@ class AudioRecorder:
         stream.close()
         self.p.terminate()
         
+    def record_and_save(self, seconds = 10):
+        samples = []
+        for chunk in self.gen_chunks(seconds):
+            samples.extend(chunk)
+        
+        with wave.open("datafiles/recording.wav", "wb") as wf:
+            wf.setnchannels(1)
+            wf.setsampwidth(self.p.get_sample_size(self.audio_format))
+            wf.setframerate(self.rate)
+            wf.writeframes((np.array(samples) * 32768.0).astype(np.int16).tobytes())
+        print("Recording saved as output.wav")
+        
 if __name__ == "__main__":
     agen = AudioRecorder()
+    agen.record_and_save(3)
     samples = []
     for chunk in agen.gen_chunks(5):
         print(chunk[:20])
