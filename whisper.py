@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 import time
 
-def time_tracker(name: str):
+def timer(name: str = "Unnamed process"):
     def decorator(func):
         def wrapper(*args, **kwargs):
             start_time = time.time()
@@ -76,7 +76,7 @@ class WhisperASR:
         "Decode token ids to text"
         return self.processor.batch_decode(predicted_ids, skip_special_tokens=True)
     
-    @time_tracker("ASR")
+    @timer("ASR")
     def transcript(self, signal, sampling_rate):
         "Generate transcription from audio signal"
         input_features = self.create_features(signal, sampling_rate)
