@@ -201,7 +201,7 @@ In summary, a frame is a collection of samples, one for each channel. The writef
 
 
 
-## 3. 参考信息
+## 3. 参考文章
 [1. VAD打断参考文章](https://cloud.tencent.com/developer/article/2369279)                   
 [2. 中科院+阿里的VAD论文(2023)](https://arxiv.org/pdf/2305.12450)    
 传统的VAD需要再语音结束后等待一小段时间，才能判断语音的阶段点，导致用户体验差，这篇文章考虑再传统的静默检测VAD模型后加入一个frame级别标点检测。
@@ -286,3 +286,33 @@ iii. 数据：不考虑打断的情况下，双工的对话数据，被切分成
 6. 回归主题： 用户打断了一下，但是马上又想回到主题。    
 有打断时的数据构建：    
 ![打断](images/interupt.png)
+
+
+## 产品调研
+当用户问到什么价格的时候，转入了其他的固定话术，双工的模型不负责具体的业务，没有rag模型，流程的触发都靠的是关键词命中，不可以当作功能型双工客服用的。   
+流程的配置相对复杂，定义的关键词足够多的时候，才能保证业务节点有回复。    
+![话术型](images/functional.png)
+
+
+
+## VAD 结果调研
+
+[FSMN VAD](https://github.com/modelscope/FunASR?tab=readme-ov-file)    
+
+```python
+from funasr import AutoModel
+model = AutoModel(model="fsmn-vad", model_revision="v2.0.4")
+res = model.generate(input="output.wav")
+
+# 这个结果返回的是所有有效的音频片段，并没有告诉我们是否要打断用户说话。
+# 针对这个情况，我们更倾向于用标点符号判断完整的语义
+>> [{'key': 'output', 'value': [[950, 4970]]}]
+```
+
+Note: The output format for the streaming VAD model can be one of four scenarios:
+
+[[beg1, end1], [beg2, end2], .., [begN, endN]]：The same as the offline VAD output result mentioned above.
+[[beg, -1]]：Indicates that only a starting point has been detected.
+[[-1, end]]：Indicates that only an ending point has been detected.
+[]：Indicates that neither a starting point nor an ending point has been detected.
+The output is measured in milliseconds and represents the absolute time from the starting point.
