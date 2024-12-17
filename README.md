@@ -1,5 +1,7 @@
 # Note on audio processing
 
+> First of all, we need to learn the basics of audio processing [here](https://huggingface.co/learn/audio-course/en/chapter1/supplemental_reading)
+
 这是一段音频流接收的代码，数据以Chunk流式传过来的，我们要在这个流式服务中，解析音频，触发动作。
 ```python
 """PyAudio Example: full-duplex wire between input and output."""
