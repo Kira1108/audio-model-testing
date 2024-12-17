@@ -321,4 +321,19 @@ The output is measured in milliseconds and represents the absolute time from the
 ## 方案探讨  
 ![proposal](images/propose.png)
 
+**需要标点符号辅助判断语义块**     
+如果流式ASR不支持添加标点符号，可以使用开源模型。
+```python
+model = AutoModel(model="ct-punc", model_revision="v2.0.4")
+res = model.generate(input="那今天的会就到这里吧 happy new year 明年见")
+print(res)
+
+>> [{'key': 'rand_key_2yW4Acq9GFz6Y', 'text': '那今天的会就到这里吧，happy new year,明年见。', 'punc_array': tensor([1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 3])}]
+
+model.generate(input="我今天吃了好多饭 特别撑 难受死了")
+>> [{'key': 'rand_key_NO6n9JEC3HqdZ',
+  'text': '我今天吃了好多饭，特别撑，难受死了。',
+  'punc_array': tensor([1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 3])}]
+```
+
 
