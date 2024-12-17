@@ -6,8 +6,9 @@ agen = AudioRecorder()
 whisper = WhisperASR()
 
 samples = []
-for chunk in agen.gen_chunks(seconds = 10):
+for chunk in agen.gen_chunks(seconds = 5):
     samples.extend(chunk)
+    # print(whisper(chunk, sampling_rate))
     
 print(whisper(samples, sampling_rate))
     
