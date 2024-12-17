@@ -320,7 +320,7 @@ Note: The output format for the streaming VAD model can be one of four scenarios
 The output is measured in milliseconds and represents the absolute time from the starting point.
 
 
-## 方案探讨 
+## 方案--老老实实用标点符号 
 **整体设想：** 
 
 ![proposal](images/propose.png)
