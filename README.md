@@ -324,7 +324,8 @@ The output is measured in milliseconds and represents the absolute time from the
 ![proposal](images/propose.png)
 
 **需要标点符号辅助判断语义块**     
-如果流式ASR不支持添加标点符号，可以使用开源模型。
+如果流式ASR不支持添加标点符号，可以使用开源模型，FunASR添加标点符号的模型，一般在100ms - 300ms之间，速度可以接收。
+GPU可能更快。
 ```python
 model = AutoModel(model="ct-punc", model_revision="v2.0.4")
 res = model.generate(input="那今天的会就到这里吧 happy new year 明年见")
