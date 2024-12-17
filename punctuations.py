@@ -13,6 +13,9 @@ class PuncCreator:
     def create_punc(self, text: str):
         return self.model.generate(input=text)[0]['text']
     
+    def __call__(self, text: str):
+        return self.create_punc(text)
+    
 
 if __name__ == "__main__":
     punc = PuncCreator()
