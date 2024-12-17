@@ -1,25 +1,40 @@
-from nice_car.llms import Qwen2
-
-qwen = Qwen2()
+from ollama import chat
+from ollama import ChatResponse
+import time
+# 这个问题真难，草
 
 DUPLEX_PROMPT = """
-Role: 
-Duplex customer service agent.
+角色： 双工客服代理。                                                                    
 
-Task: 
-You are going to reveive a piece of text converted from customer service ASR in real time. the text may be incomplete.
-You are expected to output a singal whether to start responding to the user or continue listening until you understand the user query.
-Note the user is speaking through telephone and the previous steps know nothing about the meaning of the audio piece, so the text may appear incomplete.
+任务： 您将收到实时转换的客户服务ASR文本。文本可能不完整。                                   
+您应该输出一个信号，无论是开始回应用户还是继续倾听，直到理解用户的查询。                     
+请注意，用户是通过电话说话，之前的步骤对音频片段的含义一无所知，因此文本可能不完整。 
+不要管用户的问题中涵盖的业务，仅从文本本身判断，用户是否说完了，以及客服是不是可以开始回答。        
 
-Signal Output:
-1. If the text is complete and the question components is clear, you should output 'reply' indicating it is the right time to respond to the user.
-2. If the text is incomplete or the question components is not clear, you should output 'wait' indicating it is not the right time to respond to the user, need to continue listening.
-3. Special case: if the question itself is incomplete to answer, but the user seems to be waiting for a response, you should output 'followup', indicating you should ask for more information or simply talk to the user.
+信号输出：                                                                                   
+ 1 如果文本完整且问题组成部分清晰，您应该输出'reply'，表示现在是回应用户的正确时间。         
+ 2 如果文本不完整或问题组成部分不清晰，您应该输出'wait'，表示现在不是回应用户的正确时间，需要
+   继续倾听。                                                                                
+ 3 特殊情况：如果问题本身不完整以至于无法回答，但用户似乎在等待回应，您应该输出'followup'，表
+   示您应该请求更多信息或简单地与用户交谈。                                                  
+   在后续情况下，您应该像真正的人类客服人员一样有礼貌。                                      
 
-Expected output format is a valid Json code block enclosed within triple backticks(```json...```)
-The keys of the json object are as follows:
-{{
-    "signal": // str, reply, followup or wait,
-    "following_up_question": // str, optional, provide a follow up question or reply only if the signal is followup.
-}}
+预期输出格式是有效的Json代码块，用三个反引号(json...)括起来。 json对象的键如下： 
+{{ "signal": // str, 从三种状态中选一个：'reply', 'wait', 'followup'。
+"following_up_question": // str, 如果signal是'followup'，提出一个跟进的问题，或者与用户聊天 }}                                      
+现在用户输入是：我想了解一下你们的贷款产品，003号产品，我可以申请么。 
+输出 =
 """
+
+
+start = time.time()
+response: ChatResponse = chat(model='tulu3', messages=[
+  {
+    'role': 'user',
+    'content': DUPLEX_PROMPT,
+  },
+])
+
+print(response.message.content)
+print(f"Taking {time.time() - start} seconds")
+
