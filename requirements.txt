@@ -3,3 +3,8 @@ soundfile
 torch
 transformers
 pydantic
+torchaudio
+funasr
+pydub
+onnx
+onnxconverter_common
