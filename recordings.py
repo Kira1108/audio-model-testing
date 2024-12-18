@@ -5,6 +5,7 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Any
 import wave
+from typing import Generator
 
 @dataclass
 class AudioRecorder:
@@ -30,7 +31,7 @@ class AudioRecorder:
             self.channels = 1 if sys.platform == 'darwin' else 2
         self.p = pyaudio.PyAudio()
         
-    def gen_chunks(self, seconds:int = 10):
+    def gen_chunks(self, seconds:int = 10) -> Generator[list, None, None]:
         stream = self.p.open(
             format=self.audio_format, 
             channels=self.channels, 
