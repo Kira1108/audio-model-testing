@@ -297,6 +297,8 @@ iii. 数据：不考虑打断的情况下，双工的对话数据，被切分成
 
 [10. 牛逼还是要吹的](https://blog.csdn.net/u011983997/article/details/122624952)
 
+[11. 开源框架-Funasr](https://www.funasr.com/#/)
+
 ## VAD 结果调研
 
 [FSMN VAD](https://github.com/modelscope/FunASR?tab=readme-ov-file)    
