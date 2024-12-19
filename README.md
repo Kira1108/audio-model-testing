@@ -322,29 +322,20 @@ Note: The output format for the streaming VAD model can be one of four scenarios
 The output is measured in milliseconds and represents the absolute time from the starting point.
 
 
-## 方案--老老实实用标点符号 
-**整体设想：** 
+## 方案探讨
+#### 1) 整体设想：
 
 ![proposal](images/propose.png)
-
-**需要标点符号辅助判断语义块**     
-如果流式ASR不支持添加标点符号，可以使用开源模型，FunASR添加标点符号的模型，一般在100ms - 300ms之间，速度可以接收。
-GPU可能更快。
-```python
-model = AutoModel(model="ct-punc", model_revision="v2.0.4")
-res = model.generate(input="那今天的会就到这里吧 happy new year 明年见")
-print(res)
-
->> [{'key': 'rand_key_2yW4Acq9GFz6Y', 'text': '那今天的会就到这里吧，happy new year,明年见。', 'punc_array': tensor([1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 3])}]
-
-model.generate(input="我今天吃了好多饭 特别撑 难受死了")
->> [{'key': 'rand_key_NO6n9JEC3HqdZ',
-  'text': '我今天吃了好多饭，特别撑，难受死了。',
-  'punc_array': tensor([1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 3])}]    
-```      
 
 **Full-duplex: 一方说话的时候，另一方在思考**       
 这也就是说，说话的一方说的废话越多，时间越长，思考的一方就有更多的时间得出正确的答案。  
 所以我们不打断用户，我们只需要知道用户说完了即可。实际上有两种不同的思考方式。    
 1. 插嘴，插嘴越多，给对方的感觉就是更好的全双工。
 2. 不插嘴，只在说话表达结束后才说话，这样给自己的时间更多，降低模型推理压力。
+
+
+#### 2) 在现有流程上，加入新的功能
+![方案图片](images/funasr.png)
+
+
+
