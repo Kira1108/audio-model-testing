@@ -1,3 +1,5 @@
+import logging
+logging.basicConfig(level = logging.INFO)
 from functools import lru_cache
 from funasr import AutoModel
 from dataclasses import dataclass
@@ -33,7 +35,7 @@ class Vad:
         []：Indicates that neither a starting point nor an ending point has been detected.
         """
         intervals = self.vad(speech_chunk, is_final)
-        print("<intervals>: ", intervals)
+        logging.info(f"[VAD intervals]: {intervals}")
         
         if not len(intervals) > 0:
             return False

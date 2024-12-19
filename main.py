@@ -3,6 +3,7 @@ import os
 from punctuations import PuncCreator
 from paraformer import Paraformer
 from vad import Vad
+from audio_loader import load_file
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -18,7 +19,7 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
     paraformer = Paraformer()
     
     # 切分文件
-    speech, sample_rate = soundfile.read(fp)
+    speech, sample_rate = load_file(fp) #soundfile.read(fp)
     total_chunk_num = int(len((speech)-1)/chunk_stride+1)
     buffer = ""
 
@@ -26,6 +27,7 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
     for i in range(total_chunk_num):
         speech_chunk = speech[i*chunk_stride:(i+1)*chunk_stride]
         is_final = i == total_chunk_num - 1
+
         
         res = paraformer.stream_asr(
             speech_chunk, 
