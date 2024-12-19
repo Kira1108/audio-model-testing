@@ -6,6 +6,7 @@ from vad import Vad
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
+    
     # 添加标点符号
     punc = PuncCreator()
     
@@ -15,6 +16,8 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
     
     # 语音识别
     paraformer = Paraformer()
+    
+    # 切分文件
     speech, sample_rate = soundfile.read(fp)
     total_chunk_num = int(len((speech)-1)/chunk_stride+1)
     buffer = ""
