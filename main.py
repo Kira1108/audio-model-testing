@@ -28,7 +28,6 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
         speech_chunk = speech[i*chunk_stride:(i+1)*chunk_stride]
         is_final = i == total_chunk_num - 1
 
-        
         res = paraformer.stream_asr(
             speech_chunk, 
             is_final
