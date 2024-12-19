@@ -23,5 +23,5 @@ class PuncCreator:
 
 if __name__ == "__main__":
     punc = PuncCreator()
-    result_str = punc.create_punc("团队是个人的延伸 胖子哥 你说对不对")
+    result_str = punc.create_punc("说你呢看啥呢脑子有问题吧擦")
     print(result_str)
