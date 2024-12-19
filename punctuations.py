@@ -41,19 +41,6 @@ class StreamPuncCreator:
         return self.create_punc(text)
     
     
-# from funasr import AutoModel
-
-# model = AutoModel(model="iic/punc_ct-transformer_zh-cn-common-vad_realtime-vocab272727")
-
-# inputs = "欢迎体验这个|阿里巴巴|这个达摩院的|大模型|总的来说|这个大模型还是不错的|真的很好了|希望大家喜欢|我说完了|哈哈|"
-# vads = inputs.split("|")
-# rec_result_all = "outputs: "
-# cache = {}
-# for vad in vads:
-#     rec_result = model.generate(input=vad, cache=cache)
-#     rec_result_all += rec_result[0]["text"]
-# print(rec_result_all)
-    
 
 if __name__ == "__main__":
     punc = PuncCreator()
