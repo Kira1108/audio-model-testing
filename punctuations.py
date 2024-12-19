@@ -5,13 +5,13 @@ from functools import lru_cache
 from timer import timer
 
 @lru_cache(maxsize = None)
-def load_model(model: str = "ct-punc"):
+def load_punc_model(model: str = "ct-punc"):
     return AutoModel(model=model)
 
 class PuncCreator:
     """Add punctuations to Chinese text with FunASR models."""
     def __init__(self, model: str = "ct-punc"):
-        self.model = load_model(model)
+        self.model = load_punc_model(model)
         
     @timer(name = "Punctuation generation")
     def create_punc(self, text: str):
