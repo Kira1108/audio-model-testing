@@ -24,6 +24,8 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
         buffer += res
         if vad.shutup(speech_chunk, is_final) and len(buffer) > 0:
             display = punc.create_punc(buffer)
+            # 判断标点是否结束标点
+            # 如果是结束标点，llm(buffer) -> tts(buffer)
         else:
             display = buffer
             
