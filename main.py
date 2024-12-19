@@ -8,9 +8,11 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
     # 添加标点符号
     punc = PuncCreator()
-    # 静音检测
+    
+    # 语音断点检测
     vad = Vad()
     chunk_stride = 9600
+    
     # 语音识别
     paraformer = Paraformer()
     speech, sample_rate = soundfile.read(fp)
