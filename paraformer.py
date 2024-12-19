@@ -49,21 +49,32 @@ def test_paraformer():
     import soundfile
     import os
     from punctuations import PuncCreator
+    from vad import Vad
     punc = PuncCreator()
+    
     chunk_stride = 9600
     paraformer = Paraformer()
+    vad = Vad()
+    
     fp = "datafiles/asr_example.wav"
     speech, sample_rate = soundfile.read(fp)
     total_chunk_num = int(len((speech)-1)/chunk_stride+1)
     buffer = ""
 
     for i in range(total_chunk_num):
+        speech_chunk = speech[i*chunk_stride:(i+1)*chunk_stride]
+        is_final = i == total_chunk_num - 1
+        
         res = paraformer.stream_asr(
-            speech[i*chunk_stride:(i+1)*chunk_stride], 
-            i == total_chunk_num - 1
+            speech_chunk, 
+            is_final
         )
         buffer += res
-        display = buffer if len(buffer) == 0 else punc.create_punc(buffer)
+        if vad.shutup(speech_chunk, is_final) and len(buffer) > 0:
+            display = punc.create_punc(buffer)
+        else:
+            display = buffer
+            
         print(f"Current buffer [{i}]th: ", display)
         
 if __name__ == "__main__":
