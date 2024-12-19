@@ -3,6 +3,8 @@ logging.basicConfig(level = logging.INFO)
 from funasr import AutoModel
 from functools import lru_cache
 from timer import timer
+# TODO: 换成流式的标点还原
+# https://github.com/modelscope/FunASR/blob/main/examples/industrial_data_pretraining/ct_transformer_streaming/demo.py
 
 @lru_cache(maxsize = None)
 def load_punc_model(model: str = "ct-punc"):
