@@ -32,4 +32,4 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
         print(f"Current buffer [{i}]th: ", display)
         
 if __name__ == "__main__":
-    streaming_audio()
+    streaming_audio("datafiles/output.wav")

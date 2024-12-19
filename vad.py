@@ -33,6 +33,7 @@ class Vad:
         []：Indicates that neither a starting point nor an ending point has been detected.
         """
         intervals = self.vad(speech_chunk, is_final)
+        print("<intervals>: ", intervals)
         
         if not len(intervals) > 0:
             return False
