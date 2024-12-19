@@ -5,6 +5,7 @@ from paraformer import Paraformer
 from vad import Vad
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
+    """手动撕开音频文件测试流式处理流程"""
     # 添加标点符号
     punc = PuncCreator()
     # 静音检测
