@@ -96,9 +96,6 @@ def main():
             print("Getting ASR Chunk: ", text)
     
 
-
-
-
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
     main()
