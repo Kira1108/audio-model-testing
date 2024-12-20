@@ -107,11 +107,9 @@ def main_recording():
     asr_streaming = ASRStreaming()
     for chunk in recorder.gen_chunks(20):
         threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk, False)).start()
-        # for text in asr_streaming.asr(chunk, False):
-        #     print("Got ASR Chunk: ", text)
     
 
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
-    # main()
-    main_recording()
+    # main() # 处理一个文件
+    main_recording() # 实时录音看效果
