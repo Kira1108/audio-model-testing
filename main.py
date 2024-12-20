@@ -9,6 +9,7 @@ from punctuations import PuncCreator
 from recordings import AudioRecorder
 from vad import Vad
 
+CHUNK_SIZE = 9600
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -18,7 +19,7 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
     
     # 语音断点检测
     vad = Vad()
-    chunk_stride = 9600
+    chunk_stride = CHUNK_SIZE
     
     # 语音识别
     paraformer = Paraformer()
@@ -97,15 +98,15 @@ def main():
     asr_streaming = ASRStreaming()
     speech, sample_rate = load_file("datafiles/recording.wav")
     # make the speech array 2times long,repeat 1 time
-    total_chunk_num = int(len((speech)-1)/9600+1)
+    total_chunk_num = int(len((speech)-1)/CHUNK_SIZE+1)
     for i in range(total_chunk_num):
-        speech_chunk = speech[i*9600:(i+1)*9600]
+        speech_chunk = speech[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE]
         is_final = i == total_chunk_num - 1
         for text in asr_streaming.asr(speech_chunk, is_final):
             print("Got ASR Chunk: ", text)
             
 def main_recording():
-    recorder = AudioRecorder(chunk_size=9600)
+    recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
     asr_streaming = ASRStreaming()
     for chunk in recorder.gen_chunks(20):
         # 此处单开一个线程，避免录音时的overflow现象
