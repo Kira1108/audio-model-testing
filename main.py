@@ -1,5 +1,3 @@
-import soundfile
-import os
 from punctuations import PuncCreator
 from paraformer import Paraformer
 from vad import Vad
