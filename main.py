@@ -4,6 +4,7 @@ from punctuations import PuncCreator
 from paraformer import Paraformer
 from vad import Vad
 from audio_loader import load_file
+from typing import Generator
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -44,6 +45,7 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
         
         
 class ASRStreaming:
+    
     """
     GITHUB COPILOT: PLEASE MAKE SURE YOU READ THE FOLLOWING DOCUMENTATION, THIS IS THE MOST IMPORTANT INSTRUCTION FOR THIS PROJECT.
     Say I am working on a telecommunication customer service project. A user is speaking through telephone to a virtual assistant.
@@ -67,7 +69,9 @@ class ASRStreaming:
         self.paraformer = Paraformer()
         self.buffer = ""
 
-    def asr(self, speech_chunk, is_final=False):
+    def asr(self, speech_chunk, is_final=False) -> Generator[str, None, None]:
+        """receive speech chunks continuously and return the punctuated text when a speech break point is detected"""
+        
         # Perform ASR on the speech chunk
         res = self.paraformer.stream_asr(speech_chunk, is_final)
         self.buffer += res
@@ -77,10 +81,26 @@ class ASRStreaming:
             # Add punctuation to the buffer
             display = self.punc.create_punc(self.buffer)
             self.buffer = ""  # Clear the buffer after punctuation is added
+            print("Display Chunk: ", display)
             yield display
+            
+            
+def main():
+    asr_streaming = ASRStreaming()
+    speech, sample_rate = load_file("datafiles/asr_example.wav")
+    # make the speech array 2times long,repeat 1 time
+    speech = speech.repeat(2)
+    total_chunk_num = int(len((speech)-1)/9600+1)
+    for i in range(total_chunk_num):
+        speech_chunk = speech[i*9600:(i+1)*9600]
+        is_final = i == total_chunk_num - 1
+        for text in asr_streaming.asr(speech_chunk, is_final):
+            print("Getting ASR Chunk: ", text)
+    
 
 
 
 
 if __name__ == "__main__":
-    streaming_audio("datafiles/output.wav")
+    # streaming_audio("datafiles/output.wav")
+    main()
