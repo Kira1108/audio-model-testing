@@ -5,6 +5,8 @@ from paraformer import Paraformer
 from vad import Vad
 from audio_loader import load_file
 from typing import Generator
+from recordings import AudioRecorder
+import threading
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -84,7 +86,10 @@ class ASRStreaming:
             yield display
             
         yield ""
-            
+           
+def process_asr_chunk(asr_streaming, speech_chunk, is_final):
+    for text in asr_streaming.asr(speech_chunk, is_final):
+        print("Got ASR Chunk: ", text)
             
 def main():
     asr_streaming = ASRStreaming()
@@ -96,8 +101,17 @@ def main():
         is_final = i == total_chunk_num - 1
         for text in asr_streaming.asr(speech_chunk, is_final):
             print("Got ASR Chunk: ", text)
+            
+def main_recording():
+    recorder = AudioRecorder(chunk_size=9600)
+    asr_streaming = ASRStreaming()
+    for chunk in recorder.gen_chunks(20):
+        threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk, False)).start()
+        # for text in asr_streaming.asr(chunk, False):
+        #     print("Got ASR Chunk: ", text)
     
 
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
-    main()
+    # main()
+    main_recording()

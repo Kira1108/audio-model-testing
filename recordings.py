@@ -48,7 +48,7 @@ class AudioRecorder:
                 samples = samples.reshape(-1, 2)
                 samples = samples.mean(axis=1).astype(np.int16)
             samples = samples / 32768.0
-            yield samples.tolist()
+            yield np.array(samples)
         
         print('Recording Done...')
         stream.close()
