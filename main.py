@@ -9,7 +9,10 @@ from punctuations import PuncCreator
 from recordings import AudioRecorder
 from vad import Vad
 
-CHUNK_SIZE = 9600
+
+CHUNK_FRAMES = 10
+CHUNK_SIZE = int(CHUNK_FRAMES * 60 * 16000 / 1000)
+# CHUNK_SIZE = 9600
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -71,7 +74,7 @@ class ASRStreaming:
     def __init__(self):
         self.punc = PuncCreator()
         self.vad = Vad()
-        self.paraformer = Paraformer()
+        self.paraformer = Paraformer(chunk_size = [0,CHUNK_FRAMES, int(CHUNK_FRAMES/2)])
         self.buffer = ""
 
     def asr(self, speech_chunk, is_final=False) -> Generator[str, None, None]:
