@@ -34,7 +34,7 @@ def streaming_audio(fp = "datafiles/asr_example.wav"):
             is_final
         )
         buffer += res
-        
+        # TODO: 让VAD更快，减少判断时间
         if vad.shutup(speech_chunk, is_final) and len(buffer) > 0:
             display = punc.create_punc(buffer)
             # 发现有一个可以返回的片段
