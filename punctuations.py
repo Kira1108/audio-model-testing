@@ -1,9 +1,10 @@
 import logging
-logging.basicConfig(level = logging.INFO)
-from funasr import AutoModel
 from functools import lru_cache
-from timer import timer
 from typing import List
+
+from funasr import AutoModel
+
+from timer import timer
 
 # TODO: 换成流式的标点还原
 # https://github.com/modelscope/FunASR/blob/main/examples/industrial_data_pretraining/ct_transformer_streaming/demo.py

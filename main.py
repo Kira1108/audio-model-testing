@@ -1,10 +1,14 @@
-from punctuations import PuncCreator
-from paraformer import Paraformer
-from vad import Vad
-from audio_loader import load_file
-from typing import Generator
-from recordings import AudioRecorder
+import logging
+logging.basicConfig(level=logging.INFO)
 import threading
+from typing import Generator
+
+from audio_loader import load_file
+from paraformer import Paraformer
+from punctuations import PuncCreator
+from recordings import AudioRecorder
+from vad import Vad
+
 
 def streaming_audio(fp = "datafiles/asr_example.wav"):
     """手动撕开音频文件测试流式处理流程"""
@@ -110,5 +114,5 @@ def main_recording():
 
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
-    # main() # 处理一个文件
-    main_recording() # 实时录音看效果, 用你的麦克风说话
+    main() # 处理一个文件
+    # main_recording() # 实时录音看效果, 用你的麦克风说话

@@ -1,11 +1,13 @@
-import sys
-import pyaudio
+import logging
 import struct
-import numpy as np
-from dataclasses import dataclass
-from typing import Any
+import sys
 import wave
-from typing import Generator
+from dataclasses import dataclass
+from typing import Any, Generator
+
+import numpy as np
+import pyaudio
+
 
 @dataclass
 class AudioRecorder:

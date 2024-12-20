@@ -1,11 +1,13 @@
 import logging
-logging.basicConfig(level = logging.INFO)
-from functools import lru_cache
-from funasr import AutoModel
 from dataclasses import dataclass
-from timer import timer
+from functools import lru_cache
 from typing import Union
+
 import numpy as np
+from funasr import AutoModel
+
+from timer import timer
+
 
 @lru_cache(maxsize = None)
 def load_model():
@@ -48,8 +50,10 @@ class Vad:
         return False
     
 def test_vad():
-    import soundfile
     import os
+
+    import soundfile
+
     from punctuations import PuncCreator
     punc = PuncCreator()
     chunk_stride = 9600

@@ -1,14 +1,12 @@
 import logging
-logging.basicConfig(level = logging.INFO)
-from transformers import (
-    WhisperProcessor, 
-    WhisperForConditionalGeneration
-)
-import torch
-import logging
 from dataclasses import dataclass
 from functools import lru_cache
+
+import torch
+from transformers import WhisperForConditionalGeneration, WhisperProcessor
+
 from timer import timer
+
 
 @lru_cache(maxsize = None)
 def load_asr_model(device:str = None):

@@ -1,5 +1,4 @@
 import logging
-logging.basicConfig(level = logging.INFO)
 import time
 
 def timer(name: str = "Unnamed process"):

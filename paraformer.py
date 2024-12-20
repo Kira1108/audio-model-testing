@@ -1,10 +1,11 @@
 import logging
-logging.basicConfig(level = logging.INFO)
 from dataclasses import dataclass, field
 from functools import lru_cache
-from funasr import AutoModel
 from typing import Union
+
 import numpy as np
+from funasr import AutoModel
+
 from timer import timer
 
 
@@ -46,8 +47,10 @@ class Paraformer:
         
         
 def test_paraformer():
-    import soundfile
     import os
+
+    import soundfile
+
     from punctuations import PuncCreator
     from vad import Vad
     punc = PuncCreator()
