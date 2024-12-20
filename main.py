@@ -81,15 +81,13 @@ class ASRStreaming:
             # Add punctuation to the buffer
             display = self.punc.create_punc(self.buffer)
             self.buffer = ""  # Clear the buffer after punctuation is added
-            print("Display Chunk: ", display)
             yield display
             
             
 def main():
     asr_streaming = ASRStreaming()
-    speech, sample_rate = load_file("datafiles/asr_example.wav")
+    speech, sample_rate = load_file("datafiles/recording.wav")
     # make the speech array 2times long,repeat 1 time
-    speech = speech.repeat(2)
     total_chunk_num = int(len((speech)-1)/9600+1)
     for i in range(total_chunk_num):
         speech_chunk = speech[i*9600:(i+1)*9600]

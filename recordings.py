@@ -68,12 +68,13 @@ class AudioRecorder:
         
 if __name__ == "__main__":
     agen = AudioRecorder()
-    agen.record_and_save(3)
-    samples = []
-    for chunk in agen.gen_chunks(5):
-        print(chunk[:20])
-        samples.extend(chunk)
-    print("Total samples:", len(samples))
+    agen.record_and_save(10)
+    # agen.record_and_save(3)
+    # samples = []
+    # for chunk in agen.gen_chunks(5):
+    #     print(chunk[:20])
+    #     samples.extend(chunk)
+    # print("Total samples:", len(samples))
     
 
     
