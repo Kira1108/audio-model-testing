@@ -108,7 +108,7 @@ def main():
 def main_recording():
     recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
     asr_streaming = ASRStreaming()
-    for chunk in recorder.gen_chunks(20):
+    for chunk in recorder.gen_chunks(50):
         # 此处单开一个线程，避免录音时的overflow现象
         threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk, False)).start()
     
