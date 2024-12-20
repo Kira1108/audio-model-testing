@@ -115,5 +115,5 @@ def main_recording():
 
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
-    main() # 处理一个文件
-    # main_recording() # 实时录音看效果, 用你的麦克风说话
+    # main() # 处理一个文件
+    main_recording() # 实时录音看效果, 用你的麦克风说话
