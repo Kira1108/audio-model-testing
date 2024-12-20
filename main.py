@@ -83,6 +83,8 @@ class ASRStreaming:
             self.buffer = ""  # Clear the buffer after punctuation is added
             yield display
             
+        yield ""
+            
             
 def main():
     asr_streaming = ASRStreaming()
@@ -93,7 +95,7 @@ def main():
         speech_chunk = speech[i*9600:(i+1)*9600]
         is_final = i == total_chunk_num - 1
         for text in asr_streaming.asr(speech_chunk, is_final):
-            print("Getting ASR Chunk: ", text)
+            print("Got ASR Chunk: ", text)
     
 
 if __name__ == "__main__":
