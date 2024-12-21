@@ -1,5 +1,9 @@
 # Note on audio processing
 
+TODO:
+1. 测试[Silero](https://blog.iamdev.cn/post/2024/Silero_VAD_一款轻量级_高精度语音活动检测器__/)效果
+2. 测试不同的frame, chunk size对整个流程的影响
+
 > First of all, we need to learn the basics of audio processing [here](https://huggingface.co/learn/audio-course/en/chapter1/supplemental_reading)
 
 这是一段音频流接收的代码，数据以Chunk流式传过来的，我们要在这个流式服务中，解析音频，触发动作。
