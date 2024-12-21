@@ -84,6 +84,7 @@ class ASRStreaming:
         res = self.paraformer.stream_asr(speech_chunk, is_final)
         self.buffer += res
         
+        logging.info("Current buffer: " + self.buffer)   
         # Check for speech breakpoints using VAD
         if self.vad.shutup(speech_chunk, is_final) and len(self.buffer) > 0:
             # Add punctuation to the buffer
