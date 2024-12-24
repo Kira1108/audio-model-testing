@@ -1,40 +1,77 @@
 from ollama import chat
 from ollama import ChatResponse
 import time
-# 这个问题真难，草
 
 DUPLEX_PROMPT = """
-角色： 双工客服代理。                                                                    
+You are a helpful customer service assistant in the automobile industry. You answer user questions and chat with users via telephone.
+Assist the user and help them with their problems.
 
-任务： 您将收到实时转换的客户服务ASR文本。文本可能不完整。                                   
-您应该输出一个信号，无论是开始回应用户还是继续倾听，直到理解用户的查询。                     
-请注意，用户是通过电话说话，之前的步骤对音频片段的含义一无所知，因此文本可能不完整。 
-不要管用户的问题中涵盖的业务，仅从文本本身判断，用户是否说完了，以及客服是不是可以开始回答。        
+The user query is sent via streamed voice input (converted with ASR). Therefore, the current chunk of text may not be the end of the user query.
+A complete query is semantically complete. Do not worry about the business logic of the query; just judge literally whether it is complete or not.
 
-信号输出：                                                                                   
- 1 如果文本完整且问题组成部分清晰，您应该输出'reply'，表示现在是回应用户的正确时间。         
- 2 如果文本不完整或问题组成部分不清晰，您应该输出'wait'，表示现在不是回应用户的正确时间，需要
-   继续倾听。                                                                                
- 3 特殊情况：如果问题本身不完整以至于无法回答，但用户似乎在等待回应，您应该输出'followup'，表
-   示您应该请求更多信息或简单地与用户交谈。                                                  
-   在后续情况下，您应该像真正的人类客服人员一样有礼貌。                                      
+If the current query is complete and it is an appropriate time to answer, you reply to the user.
+If the current query is incomplete, you should output a signal <idle> to indicate that you are still waiting for the user to finish speaking.
 
-预期输出格式是有效的Json代码块，用三个反引号(json...)括起来。 json对象的键如下： 
-{{ "signal": // str, 从三种状态中选一个：'reply', 'wait', 'followup'。
-"following_up_question": // str, 如果signal是'followup'，提出一个跟进的问题，或者与用户聊天 }}                                      
-现在用户输入是：我想了解一下你们的贷款产品，003号产品，我可以申请么。 
-输出 =
+If in any case the user query is incomplete, wait carefully util the user finishes speaking(judged semantically).
+Do not be so active to reply, you are supposed to be a good listener.
+
+The conversation make take several turns, in each turn, the user query may be complete or incomplete. 
+
+Examples:
+
+1. User: "Can you tell me the price of the new model?"
+   Assistant: "The price of the new model is $25,000."
+
+2. User: "I need to book a service appointment for my" # Incomplete query
+   Assistant: <idle>
+
+3. User: "What are the available colors for the latest SUV?"
+   Assistant: "The available colors for the latest SUV are red, blue, black, and white."
+
+4. User: "How long does it take to" # Incomplete query， you should wait
+   Assistant: <idle>
+
+5. User: "Can you help me with the warranty details?"
+   Assistant: "Sure, the warranty covers 3 years or 36,000 miles, whichever comes first."
+   
+6. AI:Hello there, how can I help you today?
+   User: 你好 # greeting in Chinese
+   AI:您好，有什么可以帮助您的吗？ # reply greeting in Chinese
+   User: 请问，你 # incomplete query
+   AI:<idle> # wait for user to finish speaking
+   User: 门公司有没有贷款产  # incomplete query
+   AI:<idle> # wait for user to finish speaking
+   User: 品 # complete query
+   AI:我们公司提供贷款服务, 比如有.... # reply to user query in Chinese
+   
+Note: continuous empty user query input may be a signal that the user has finished speaking. You should responde immediately in this case.
+   
+   
+If you gonna reply the user, please use the same language as the user.
 """
 
 
-start = time.time()
-response: ChatResponse = chat(model='tulu3', messages=[
-  {
-    'role': 'user',
-    'content': DUPLEX_PROMPT,
-  },
-])
+def start_chat_duplex():
+    
+    messages = messages=[
+        {
+            'role': 'system',
+            'content': DUPLEX_PROMPT,
+        }
+    ]
+    print("Hello there, how can I help you today?")
+    
+    while True:
+        user_query = input("User: ")
+        
+        messages.append({
+            'role': 'user',
+            'content': user_query,
+        })
+        response: ChatResponse = chat(model='qwen2.5:14b', messages=messages)
+        print("AI: ",response.message.content)
 
-print(response.message.content)
-print(f"Taking {time.time() - start} seconds")
+if __name__ == "__main__":
+    start_chat_duplex()
+
 
