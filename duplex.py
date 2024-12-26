@@ -52,7 +52,7 @@ If you gonna reply the user, please use the same language as the user.
 
 
 def start_chat_duplex():
-    
+    # system prompt
     messages = messages=[
         {
             'role': 'system',
@@ -64,11 +64,18 @@ def start_chat_duplex():
     while True:
         user_query = input("User: ")
         
+        # user prompt
         messages.append({
             'role': 'user',
             'content': user_query,
         })
         response: ChatResponse = chat(model='qwen2.5:14b', messages=messages)
+        
+        # assistant response
+        messages.append({
+            'role': 'assistant',
+            'content': response.message.content,
+        })     
         print("AI: ",response.message.content)
 
 if __name__ == "__main__":
