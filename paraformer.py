@@ -1,4 +1,5 @@
 import logging
+logging.basicConfig(level=logging.INFO)
 from dataclasses import dataclass, field
 from functools import lru_cache
 from typing import Union
@@ -55,8 +56,16 @@ def test_paraformer():
     from vad import Vad
     punc = PuncCreator()
     
-    chunk_stride = 9600
-    paraformer = Paraformer()
+    # chunk_stride = 9600
+    # chunk_size = [0,10,5]
+    
+    # chunk_stride = 7680
+    # chunk_size = [0,8,4]
+    frams = 6
+    chunk_size = [0, frams, frams//2]
+    chunk_stride = int((chunk_size[1] * 60 / 1000)* 16000)
+    
+    paraformer = Paraformer(chunk_size=chunk_size)
     vad = Vad()
     
     fp = "datafiles/asr_example.wav"

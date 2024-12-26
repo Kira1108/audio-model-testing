@@ -7,7 +7,22 @@ from typing import Any, Generator
 
 import numpy as np
 import pyaudio
+import math
 
+from dataclasses import dataclass
+
+@dataclass
+class AudioChunk:
+    chunk_id:int
+    relative_ts:float
+    data:np.array
+    
+    def to_dict(self):
+        return {
+            "chunk_id": self.chunk_id,
+            "relative_ts": self.relative_ts,
+            "data": self.data.tolist()
+        }
 
 @dataclass
 class AudioRecorder:
@@ -41,7 +56,8 @@ class AudioRecorder:
             input=True)
         
         print('Recording...')
-        for _ in range(0, self.rate // self.chunk_size * seconds):
+        n_chunks = math.ceil(seconds * self.rate / self.chunk_size)
+        for chunk_id in range(n_chunks):
             chunk = stream.read(self.chunk_size)
             fmt = f"{len(chunk) // 2}h"
             samples = struct.unpack(fmt, chunk)
@@ -50,7 +66,10 @@ class AudioRecorder:
                 samples = samples.reshape(-1, 2)
                 samples = samples.mean(axis=1).astype(np.int16)
             samples = samples / 32768.0
-            yield np.array(samples)
+            
+            # represent relative timestamp of the chunk, ending of the chunk
+            relative_ts = (chunk_id + 1) * self.chunk_size / self.rate
+            yield AudioChunk(data = np.array(samples), relative_ts=relative_ts, chunk_id=chunk_id + 1)
         
         print('Recording Done...')
         stream.close()
