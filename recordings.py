@@ -69,7 +69,10 @@ class AudioRecorder:
             
             # represent relative timestamp of the chunk, ending of the chunk
             relative_ts = (chunk_id + 1) * self.chunk_size / self.rate
-            yield AudioChunk(data = np.array(samples), relative_ts=relative_ts, chunk_id=chunk_id + 1)
+            yield AudioChunk(
+                data = np.array(samples), 
+                relative_ts=relative_ts, 
+                chunk_id=chunk_id + 1)
         
         print('Recording Done...')
         stream.close()
@@ -78,7 +81,7 @@ class AudioRecorder:
     def record_and_save(self, seconds = 10):
         samples = []
         for chunk in self.gen_chunks(seconds):
-            samples.extend(chunk)
+            samples.extend(chunk.data)
         
         with wave.open("datafiles/recording.wav", "wb") as wf:
             wf.setnchannels(1)
