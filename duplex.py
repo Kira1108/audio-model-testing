@@ -2,6 +2,7 @@ from ollama import chat
 from ollama import ChatResponse
 import time
 import copy
+from timer import timer
 
 
 def car_RAG_bot(query:str) -> int:
@@ -136,6 +137,7 @@ class DuplexChatter:
             'content': reply,
         })
         
+    @timer("Qwen Model")
     def chat(self, query:str):
         messages = copy.deepcopy(self.messages)
         messages.append({

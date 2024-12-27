@@ -64,6 +64,8 @@ def process_asr_chunk(asr_streaming, speech_chunk, chatter, is_final):
     for text in asr_streaming.asr(speech_chunk, is_final):
         if text != "":
             response = chatter.chat(text)
+            chatter.add_user_query(text)
+            chatter.add_assistant_reply(response)
             logging.info("Got ASR Chunk: " + text)
             logging.info("Got response: " +  response)
             
