@@ -9,49 +9,12 @@ from punctuations import PuncCreator
 from recordings import AudioRecorder
 from vad import Vad
 from schemas import TextChunk
+import math
 
 
 CHUNK_FRAMES = 10
 CHUNK_SIZE = int(CHUNK_FRAMES * 60 * 16000 / 1000)
 # CHUNK_SIZE = 9600
-
-def streaming_audio(fp = "datafiles/asr_example.wav"):
-    """手动撕开音频文件测试流式处理流程"""
-    
-    # 添加标点符号
-    punc = PuncCreator()
-    
-    # 语音断点检测
-    vad = Vad()
-    chunk_stride = CHUNK_SIZE
-    
-    # 语音识别
-    paraformer = Paraformer()
-    
-    # 切分文件
-    speech, sample_rate = load_file(fp)
-    total_chunk_num = int(len((speech)-1)/chunk_stride+1)
-    buffer = ""
-
-    # 流失处理
-    for i in range(total_chunk_num):
-        speech_chunk = speech[i*chunk_stride:(i+1)*chunk_stride]
-        is_final = i == total_chunk_num - 1
-
-        res = paraformer.stream_asr(
-            speech_chunk, 
-            is_final
-        )
-        buffer += res
-        # TODO: 让VAD更快，减少判断时间
-        if vad.shutup(speech_chunk, is_final) and len(buffer) > 0:
-            display = punc.create_punc(buffer)
-            # 发现有一个可以返回的片段
-        else:
-            display = buffer
-            
-        print(f"Current buffer [{i}]th: ", display)
-        
         
 class ASRStreaming:
     
@@ -102,7 +65,7 @@ def process_asr_chunk(asr_streaming, speech_chunk, is_final):
 def main():
     asr_streaming = ASRStreaming()
     speech, sample_rate = load_file("datafiles/recording.wav")
-    total_chunk_num = int(len((speech)-1)/CHUNK_SIZE+1)
+    total_chunk_num = math.ceil(len(speech) / CHUNK_SIZE)
 
     for i in range(total_chunk_num):
         current_ts = (i + 1) * CHUNK_SIZE / sample_rate
@@ -115,11 +78,9 @@ def main_recording():
     recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
     asr_streaming = ASRStreaming()
     for chunk in recorder.gen_chunks(50):
-        # 此处单开一个线程，避免录音时的overflow现象
         threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk.data, False)).start()
     
 
 if __name__ == "__main__":
-    # streaming_audio("datafiles/output.wav")
-    main() # 处理一个文件
-    # main_recording() # 实时录音看效果, 用你的麦克风说话
+    # main() # 处理一个文件
+    main_recording() # 实时录音看效果, 用你的麦克风说话

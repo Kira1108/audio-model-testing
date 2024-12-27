@@ -1,6 +1,20 @@
 from ollama import chat
 from ollama import ChatResponse
 import time
+import copy
+
+
+def car_RAG_bot(query:str) -> int:
+    """Use advanced RAG technology to get knowledge from Mivuls vector db and answer user quest
+    Is is suggested all car related questions are asked to this bot
+    Args:
+        query:str: the user query
+        
+    Returns:
+        str: answer to the user query
+    """
+    
+    return "特斯拉Model Y在北京的价格是500000人民币"
 
 DUPLEX_PROMPT = """
 You are a helpful customer service assistant in the automobile industry. You answer user questions and chat with users via telephone.
@@ -13,7 +27,6 @@ If the current query is complete and it is an appropriate time to answer, you re
 If the current query is incomplete, you should output a signal <idle> to indicate that you are still waiting for the user to finish speaking.
 
 If in any case the user query is incomplete, wait carefully util the user finishes speaking(judged semantically).
-Do not be so active to reply, you are supposed to be a good listener.
 
 The conversation make take several turns, in each turn, the user query may be complete or incomplete. 
 
@@ -35,7 +48,7 @@ Examples:
    Assistant: "Sure, the warranty covers 3 years or 36,000 miles, whichever comes first."
    
 6. AI:Hello there, how can I help you today?
-   User: 你好 # greeting in Chinese
+   User: 你好。# greeting in Chinese
    AI:您好，有什么可以帮助您的吗？ # reply greeting in Chinese
    User: 请问，你 # incomplete query
    AI:<idle> # wait for user to finish speaking
@@ -46,13 +59,14 @@ Examples:
    
 Note: continuous empty user query input may be a signal that the user has finished speaking. You should responde immediately in this case.
    
-   
+BE SURE TO USE TOOL TO ANSWER ALL USER QUERY RELATED TO CAR PARAMETERS, PRICES, AUTOMOBILE LOAN and CAR INSURANCE.
+Make sure to reply less than 100 Chinese characters in each response.
 If you gonna reply the user, please use the same language as the user.
 """
 
 
 def start_chat_duplex():
-    # system prompt
+    
     messages = messages=[
         {
             'role': 'system',
@@ -64,21 +78,74 @@ def start_chat_duplex():
     while True:
         user_query = input("User: ")
         
-        # user prompt
         messages.append({
             'role': 'user',
             'content': user_query,
         })
-        response: ChatResponse = chat(model='qwen2.5:14b', messages=messages)
+        start = time.time()
+        response: ChatResponse = chat(model='qwen2.5:14b', messages=messages,
+                                      tools=[car_RAG_bot])
         
-        # assistant response
+        print(response.message.tool_calls)
+        end = time.time()
+        print("Time taken: ", end-start)
+        
+        # 此处只有TTS在双工对话中播放了这个语音，它才应该加入到message中
         messages.append({
             'role': 'assistant',
             'content': response.message.content,
-        })     
+        })
         print("AI: ",response.message.content)
+
+
+class DuplexChatter:
+   
+    def __init__(self, 
+                 sys_prompt:str = None, 
+                 knowledge:str = None):
+        
+        if not sys_prompt:
+            sys_prompt = "You are a helpful assitant."
+            
+        if knowledge:
+            sys_prompt += f"{sys_prompt}\nWhen necessary, refer to the following knowledge to provide useful information: \n<knowledge>{knowledge}</knowledge>"
+            
+        self.messages = [
+            {'role': 'system','content': sys_prompt}
+        ]
+        
+    @classmethod
+    def demo(cls):
+        return cls(
+            sys_prompt = DUPLEX_PROMPT, 
+            knowledge = "Car related information:我们公司特斯拉Model Y在北京的价格是500000人民币， 在天津的价格是480000人民币")
+        
+    @property
+    def history(self) -> str:
+        return '\n'.join([f"{m['role']}: {m['content']}" for m in self.messages])
+        
+    def add_user_query(self, query:str):
+        """You have to add a user query to the chatting history."""
+        self.messages.append({
+            'role': 'user',
+            'content': query,
+        })
+        
+    def add_assistant_reply(self, reply:str):
+        """You have to add an assitant reply to the chatting history,"""
+        self.messages.append({
+            'role': 'assistant',
+            'content': reply,
+        })
+        
+    def chat(self, query:str):
+        messages = copy.deepcopy(self.messages)
+        messages.append({
+            'role': 'user',
+            'content': query}
+        )
+        response: ChatResponse = chat(model='qwen2.5:14b', messages=messages)
+        return response.message.content
 
 if __name__ == "__main__":
     start_chat_duplex()
-
-
