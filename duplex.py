@@ -125,14 +125,12 @@ class DuplexChatter:
         return '\n'.join([f"{m['role']}: {m['content']}" for m in self.messages])
         
     def add_user_query(self, query:str):
-        """You have to add a user query to the chatting history."""
         self.messages.append({
             'role': 'user',
             'content': query,
         })
         
     def add_assistant_reply(self, reply:str):
-        """You have to add an assitant reply to the chatting history,"""
         self.messages.append({
             'role': 'assistant',
             'content': reply,
