@@ -68,7 +68,7 @@ def test_paraformer():
     paraformer = Paraformer(chunk_size=chunk_size)
     vad = Vad()
     
-    fp = "datafiles/asr_example.wav"
+    fp = "datafiles/recording.wav"
     speech, sample_rate = soundfile.read(fp)
     total_chunk_num = int(len((speech)-1)/chunk_stride+1)
     buffer = ""
@@ -84,10 +84,12 @@ def test_paraformer():
         buffer += res
         if vad.shutup(speech_chunk, is_final) and len(buffer) > 0:
             display = punc.create_punc(buffer)
+            print(f"Current buffer [{i}]th: ", display)
+            buffer = ""
         else:
             display = buffer
             
-        print(f"Current buffer [{i}]th: ", display)
+        
         
 if __name__ == "__main__":
     test_paraformer()

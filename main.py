@@ -109,7 +109,7 @@ def main():
         speech_chunk = speech[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE]
         is_final = i == total_chunk_num - 1
         for text in asr_streaming.asr(speech_chunk, is_final):
-            print(f"Got ASR Chunk <{i}-{current_ts}>: ", text)
+            print(f"Got ASR Chunk <{i}-{i+1}-{current_ts}>: ", text)
             
 def main_recording():
     recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
