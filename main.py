@@ -10,6 +10,7 @@ from recordings import AudioRecorder
 from vad import Vad
 from schemas import TextChunk
 import math
+from duplex import DuplexChatter
 
 
 CHUNK_FRAMES = 10
@@ -57,10 +58,14 @@ class ASRStreaming:
             yield display
             
         yield ""
-           
-def process_asr_chunk(asr_streaming, speech_chunk, is_final):
+       
+    
+def process_asr_chunk(asr_streaming, speech_chunk, chatter, is_final):
     for text in asr_streaming.asr(speech_chunk, is_final):
-        print("Got ASR Chunk: ", text)
+        if text != "":
+            response = chatter.chat(text)
+            logging.info("Got ASR Chunk: " + text)
+            logging.info("Got response: " +  response)
             
 def main():
     asr_streaming = ASRStreaming()
@@ -77,8 +82,9 @@ def main():
 def main_recording():
     recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
     asr_streaming = ASRStreaming()
+    chatter = DuplexChatter.demo()
     for chunk in recorder.gen_chunks(50):
-        threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk.data, False)).start()
+        threading.Thread(target=process_asr_chunk, args=(asr_streaming, chunk.data, chatter, False)).start()
     
 
 if __name__ == "__main__":
