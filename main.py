@@ -59,8 +59,7 @@ class ASRStreaming:
         yield ""
        
 def reply_tts(text:str):
-    print("Replying to user with tts: ", text)
-    pass    
+    logging.info("Replying to user with tts: " + text)
 
 def process_asr_chunk(asr_streaming, speech_chunk, chatter, is_final):
     for text in asr_streaming.asr(speech_chunk, is_final):
