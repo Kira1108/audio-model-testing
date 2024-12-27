@@ -102,7 +102,6 @@ def process_asr_chunk(asr_streaming, speech_chunk, is_final):
 def main():
     asr_streaming = ASRStreaming()
     speech, sample_rate = load_file("datafiles/recording.wav")
-    # make the speech array 2times long,repeat 1 time
     total_chunk_num = int(len((speech)-1)/CHUNK_SIZE+1)
     for i in range(total_chunk_num):
         speech_chunk = speech[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE]
