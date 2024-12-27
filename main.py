@@ -85,7 +85,7 @@ class ASRStreaming:
         res = self.paraformer.stream_asr(speech_chunk, is_final)
         self.buffer += res
         
-        logging.info("Current buffer: " + self.buffer)   
+        # logging.info("Current buffer: " + self.buffer)   
         # Check for speech breakpoints using VAD
         if self.vad.shutup(speech_chunk, is_final) and len(self.buffer) > 0:
             # Add punctuation to the buffer
@@ -103,11 +103,13 @@ def main():
     asr_streaming = ASRStreaming()
     speech, sample_rate = load_file("datafiles/recording.wav")
     total_chunk_num = int(len((speech)-1)/CHUNK_SIZE+1)
+
     for i in range(total_chunk_num):
+        current_ts = (i + 1) * CHUNK_SIZE / sample_rate
         speech_chunk = speech[i*CHUNK_SIZE:(i+1)*CHUNK_SIZE]
         is_final = i == total_chunk_num - 1
         for text in asr_streaming.asr(speech_chunk, is_final):
-            print("Got ASR Chunk: ", text)
+            print(f"Got ASR Chunk <{i}-{current_ts}>: ", text)
             
 def main_recording():
     recorder = AudioRecorder(chunk_size=CHUNK_SIZE)
@@ -119,5 +121,5 @@ def main_recording():
 
 if __name__ == "__main__":
     # streaming_audio("datafiles/output.wav")
-    # main() # 处理一个文件
-    main_recording() # 实时录音看效果, 用你的麦克风说话
+    main() # 处理一个文件
+    # main_recording() # 实时录音看效果, 用你的麦克风说话
