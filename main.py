@@ -8,7 +8,6 @@ from paraformer import Paraformer
 from punctuations import PuncCreator
 from recordings import AudioRecorder
 from vad import Vad
-from schemas import TextChunk
 import math
 from duplex import DuplexChatter
 
